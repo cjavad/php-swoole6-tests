@@ -1,0 +1,3 @@
+[submodule "php-benchmark-script"]
+	path = php-benchmark-script
+	url = https://github.com/sergix44/php-benchmark-script

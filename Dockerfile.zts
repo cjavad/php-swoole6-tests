@@ -1,0 +1,4 @@
+# syntax = devthefuture/dockerfile-x
+FROM php:8.3.11-zts-alpine
+
+INCLUDE Dockerfile.base

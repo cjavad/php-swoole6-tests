@@ -1,0 +1,36 @@
+# PHP Benchmark / Swoole testing compose file
+# Compare two enviroments ZTS + Threads vs NTS with processes
+#
+
+services:
+  php-zts:
+    command: "/work/benchmark.sh"
+    build:
+      context: .
+      dockerfile: Dockerfile.zts
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  php-nts:
+    command: "/work/benchmark.sh"
+    build:
+      context: .
+      dockerfile: Dockerfile.nts
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:latest
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD="yes"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 2s    # How often to run the health check
+      timeout: 5s      # How long to wait for the health check to complete
+      retries: 3       # How many retries before marking as unhealthy
+      start_period: 10s # Initial delay before starting health checks
+

@@ -1,0 +1,14 @@
+WORKDIR /work
+
+ARG RUNTIME_DEPS="libzip"
+ARG BUILD_DEPS="libzip-dev"
+
+RUN apk add $RUNTIME_DEPS $BUILD_DEPS \
+    && docker-php-ext-install mysqli zip opcache \
+    && docker-php-ext-enable opcache \
+    && apk del --purge $BUILD_DEPS
+
+COPY . .
+COPY ./1001-opcache-config.ini /usr/local/etc/php/conf.d/1001-opcache-config.ini
+
+ENTRYPOINT ["/bin/ash", "/work/entrypoint.sh"]
